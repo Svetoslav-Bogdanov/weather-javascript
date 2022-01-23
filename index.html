@@ -16,12 +16,12 @@
         <div class="row">
             <div class="col-sm-6 offset-sm-3">
                 <!-- Form start -->
-                <form class="row g-3 needs-validation mb-4" novalidate>
+                <form class="row g-3 needs-validation mb-4" id="location" novalidate>
                     <div class="col-12">
                         <label class="form-label">
                             <h5>Населено място</h5>
                         </label>
-                        <input type="text" class="form-control" id="validationCustom01" required>
+                        <input type="text" class="form-control" id="city" required>
                         <div class="invalid-feedback">
                             Това поле е задължително!
                         </div>
@@ -31,20 +31,30 @@
                         <button class="btn btn-primary btn-sm" type="submit">Търси</button>
                     </div>
                     <div class="col-6 d-grid gap-2">
-                        <button class="btn btn-primary btn-sm" type="submit">Моята локация</button>
+                        <button class="btn btn-primary btn-sm" type="button">Моята локация</button>
                     </div>
                 </form>
                 <!-- Form end -->
                 <!-- Alert unknown place start -->
-                <div class="row">
+                <div class="row d-none" id="unknown_city_error">
                     <div class="col-12">
                         <div class="alert alert-danger text-center" role="alert">Неизвестно населено място</div>
 
                     </div>
                 </div>
                 <!-- Alert unknown place end -->
+                <!-- Start of city and country block -->
+                <div class="row d-none" id="location_block">
+                    <div class="col">
+                        <ul class="list-group" id="location_list">
+
+                        </ul>
+                    </div>
+
+                </div>
+                <!-- End of city and country block -->
                 <!-- Current weather start -->
-                <div class="row mb-4">
+                <div class="row mb-4 d-none">
                     <div class="col">
 
                         <h5>Времето в момента</h5>
@@ -63,7 +73,7 @@
                 </div>
                 <!--- Current weather block end -->
                 <!-- Weather until the end of the day -->
-                <div class="row mb-4">
+                <div class="row mb-4 d-none">
                     <div class="col">
                         <h5>
                             Времето до края на деня
@@ -87,7 +97,7 @@
                 </div>
                 <!-- Weather today end -->
                 <!-- Weather next 7 days start -->
-                <div class="row mb-4">
+                <div class="row mb-4 d-none">
                     <div class="col">
                         <h5>
                             Времето през следващите 7 дни
@@ -115,6 +125,7 @@
         integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
         crossorigin="anonymous"></script>
     <script src="form-validation.js"></script>
+    <script src="index.js"></script>
 </body>
 
 </html>
