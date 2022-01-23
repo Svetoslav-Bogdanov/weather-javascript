@@ -78,15 +78,10 @@ function searchWeather(coordinates){
 
             resetLocationBlock();
 
-            document.getElementById("current_weather_icon").src = `http://openweathermap.org/img/wn/${result.current.weather[0].icon}@2x.png`
-
-            document.getElementById("current_weather_temp").innerHTML = Math.round(result.current.temp);
-
-            document.getElementById("current_weather_description").innerHTML = result.current.weather[0].description.toUpperCase();
-
-            document.getElementById("currtent-weather-block").classList.remove("d-none");
+            displayCurrentWeather(result);
 
         })
+
 
 }
 
@@ -95,4 +90,15 @@ function resetCurrentWeather(){
     document.getElementById("current_weather_temp").innerHTML = "";
     document.getElementById("current_weather_description").innerHTML = "";
     document.getElementById("currtent-weather-block").classList.add("d-none");
+}
+
+function displayCurrentWeather(result){
+    document.getElementById("current_weather_icon").src = `http://openweathermap.org/img/wn/${result.current.weather[0].icon}@2x.png`
+
+    document.getElementById("current_weather_temp").innerHTML = Math.round(result.current.temp);
+
+    document.getElementById("current_weather_description").innerHTML = result.current.weather[0].description.toUpperCase();
+
+    document.getElementById("currtent-weather-block").classList.remove("d-none");
+
 }
