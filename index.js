@@ -8,6 +8,8 @@ document.getElementById("location").addEventListener("submit", event => {
 
     resetLocationBlock();
 
+    resetCurrentWeather()
+
     const city = document.getElementById("city").value;
 
     if (city === "") {
@@ -66,9 +68,31 @@ document.getElementById("location_list").addEventListener("click", event => {
     if(event.target.tagName != "LI"){
         return
     }     
-    console.log(event.target.dataset)
+    searchWeather(event.target.dataset)
 })
 
 function searchWeather(coordinates){
-    
+    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&exclude=minutely,alerts&appid=${API_KEY}&units=metric&lang=bg`)
+    .then(result => result.json())
+        .then(result => {
+
+            resetLocationBlock();
+
+            document.getElementById("current_weather_icon").src = `http://openweathermap.org/img/wn/${result.current.weather[0].icon}@2x.png`
+
+            document.getElementById("current_weather_temp").innerHTML = Math.round(result.current.temp);
+
+            document.getElementById("current_weather_description").innerHTML = result.current.weather[0].description.toUpperCase();
+
+            document.getElementById("currtent-weather-block").classList.remove("d-none");
+
+        })
+
+}
+
+function resetCurrentWeather(){
+    document.getElementById("current_weather_icon").src = "";
+    document.getElementById("current_weather_temp").innerHTML = "";
+    document.getElementById("current_weather_description").innerHTML = "";
+    document.getElementById("currtent-weather-block").classList.add("d-none");
 }
