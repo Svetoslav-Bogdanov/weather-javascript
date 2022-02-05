@@ -8,7 +8,9 @@ document.getElementById("location").addEventListener("submit", event => {
 
     resetLocationBlock();
 
-    resetCurrentWeather()
+    resetCurrentWeather();
+
+
 
     const city = document.getElementById("city").value;
 
@@ -40,7 +42,7 @@ function displayLocationsList(result) {
 
     result.forEach(element => {
         locationsList += `<li class="list-group-item" data-lat="${element.lat}" data-lon="${element.lon}">${element.name}, ${element.country}</li>`
-        
+
     });
 
     document.getElementById("location_list").innerHTML = locationsList;
@@ -49,7 +51,7 @@ function displayLocationsList(result) {
 }
 
 function fetchAddLocations(city) {
-    fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${API_KEY}`)
+    fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${API_KEY}`)
         .then(result => result.json())
         .then(result => {
             if (result.length === 0) {
@@ -65,40 +67,80 @@ function fetchAddLocations(city) {
 }
 
 document.getElementById("location_list").addEventListener("click", event => {
-    if(event.target.tagName != "LI"){
+    if (event.target.tagName != "LI") {
         return
-    }     
+    }
     searchWeather(event.target.dataset)
 })
 
-function searchWeather(coordinates){
+function searchWeather(coordinates) {
     fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&exclude=minutely,alerts&appid=${API_KEY}&units=metric&lang=bg`)
-    .then(result => result.json())
+        .then(result => result.json())
         .then(result => {
 
             resetLocationBlock();
 
-            displayCurrentWeather(result);
+            displayCurrentWeather(result.current);
+
+            displayHourlyWeather(result.hourly);
 
         })
 
-
 }
 
-function resetCurrentWeather(){
+function resetCurrentWeather() {
     document.getElementById("current_weather_icon").src = "";
     document.getElementById("current_weather_temp").innerHTML = "";
     document.getElementById("current_weather_description").innerHTML = "";
     document.getElementById("currtent-weather-block").classList.add("d-none");
 }
 
-function displayCurrentWeather(result){
-    document.getElementById("current_weather_icon").src = `http://openweathermap.org/img/wn/${result.current.weather[0].icon}@2x.png`
+function displayCurrentWeather(current) {
+    document.getElementById("current_weather_icon").src = `https://openweathermap.org/img/wn/${current.weather[0].icon}@2x.png`
 
-    document.getElementById("current_weather_temp").innerHTML = Math.round(result.current.temp);
+    document.getElementById("current_weather_temp").innerHTML = Math.round(current.temp);
 
-    document.getElementById("current_weather_description").innerHTML = result.current.weather[0].description.toUpperCase();
+    document.getElementById("current_weather_description").innerHTML = current.weather[0].description.toUpperCase();
 
     document.getElementById("currtent-weather-block").classList.remove("d-none");
+
+}
+
+function displayHourlyWeather(hourly) {
+    const template = '<div class="row"><div class="col-2" id="hourly_weather">#hour#</div><div class="col-2"><img src="http://openweathermap.org/img/wn/#icon#@2x.png" width="20" height="20"></div><div class="col">#temp# &deg;C</div></div>';
+
+    let blockHtml = "";
+
+    const today = new Date();
+
+    hourly.forEach(hourData => {
+
+        const date = new Date(hourData.dt * 1000);
+
+        if (today.getDate() === date.getDate()) {
+
+
+            blockHtml += template.replace( "#hour#", formatTime(date.getHours()) + ":" + formatTime(date.getMinutes()))
+                .replace("#icon#", hourData.weather[0].icon )
+                .replace("#temp#", hourData.temp)
+
+        }
+
+
+    });
+
+    document.getElementById("weather_end_of_the_day").classList.remove("d-none");
+    document.getElementById("hourRows").innerHTML = blockHtml;
+
+}
+
+function formatTime(time){
+
+    if(time < 10){
+        return "0" + time;
+    }
+
+    return time;
+
 
 }
