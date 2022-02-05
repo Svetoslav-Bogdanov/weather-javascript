@@ -107,7 +107,7 @@ function displayCurrentWeather(current) {
 }
 
 function displayHourlyWeather(hourly) {
-    const template = '<div class="row"><div class="col-2" id="hourly_weather">#hour#</div><div class="col-2"><img src="http://openweathermap.org/img/wn/#icon#@2x.png" width="20" height="20"></div><div class="col">#temp# &deg;C</div></div>';
+    const template = '<div class="row"><div class="col-2" id="hourly_weather">#hour#</div><div class="col-2"><img src="https://openweathermap.org/img/wn/#icon#@2x.png" width="20" height="20"></div><div class="col">#temp# &deg;C</div></div>';
 
     let blockHtml = "";
 
