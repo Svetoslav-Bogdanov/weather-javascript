@@ -152,8 +152,6 @@ function displayDailyWeather(daily) {
 
     let htmlBlock = "";
 
-    const currentHour = new Date().getHours();
-
     daily.forEach(dailyData => {
 
         const date = new Date(dailyData.dt * 1000);
@@ -169,9 +167,11 @@ function displayDailyWeather(daily) {
 
 }
 
-function getDailyTemp(temp){
+function getDailyTemp(temp) {
 
     let tempValue = "";
+
+    const currentHour = new Date().getHours();
 
     if (currentHour >= 6 && currentHour < 10) {
         tempValue = temp.morn;
@@ -179,10 +179,20 @@ function getDailyTemp(temp){
         tempValue = temp.day;
     } else if (currentHour >= 18 && currentHour < 20) {
         tempValue = temp.eve;
-    } else if (currentHour >= 20 && currentHour < 6) {
+    } else{
         tempValue = temp.night;
     }
 
     return tempValue;
 
+}
+
+
+document.getElementById("user_location").addEventListener("click", getUserLocation)
+
+function getUserLocation() {
+    navigator.geolocation.getCurrentPosition(result => searchWeather({
+        lat: result.coords.latitude,
+        lon: result.coords.longitude
+    }));
 }
