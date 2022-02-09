@@ -84,6 +84,8 @@ function searchWeather(coordinates) {
 
             displayHourlyWeather(result.hourly);
 
+            displayDailyWeather(result.daily);
+
         })
 
 }
@@ -120,8 +122,8 @@ function displayHourlyWeather(hourly) {
         if (today.getDate() === date.getDate()) {
 
 
-            blockHtml += template.replace( "#hour#", formatTime(date.getHours()) + ":" + formatTime(date.getMinutes()))
-                .replace("#icon#", hourData.weather[0].icon )
+            blockHtml += template.replace("#hour#", formatTime(date.getHours()) + ":" + formatTime(date.getMinutes()))
+                .replace("#icon#", hourData.weather[0].icon)
                 .replace("#temp#", hourData.temp)
 
         }
@@ -134,13 +136,53 @@ function displayHourlyWeather(hourly) {
 
 }
 
-function formatTime(time){
+function formatTime(time) {
 
-    if(time < 10){
+    if (time < 10) {
         return "0" + time;
     }
 
     return time;
 
+
+}
+
+function displayDailyWeather(daily) {
+    const template = '<div class="row"><div class="col-2">#day#</div><div class="col-2"><img src="https://openweathermap.org/img/wn/#icon#@2x.png" width="20" height="20"></div><div class="col">#temp# &deg;C</div></div>'
+
+    let htmlBlock = "";
+
+    const currentHour = new Date().getHours();
+
+    daily.forEach(dailyData => {
+
+        const date = new Date(dailyData.dt * 1000);
+
+        htmlBlock += template.replace("#day#", date.getDate())
+            .replace("#icon#", dailyData.weather[0].icon)
+            .replace("#temp#", getDailyTemp(dailyData.temp));
+
+    });
+
+    document.getElementById("weather_next_seven_days").classList.remove("d-none");
+    document.getElementById("dailyRows").innerHTML = htmlBlock;
+
+}
+
+function getDailyTemp(temp){
+
+    let tempValue = "";
+
+    if (currentHour >= 6 && currentHour < 10) {
+        tempValue = temp.morn;
+    } else if (currentHour >= 10 && currentHour < 18) {
+        tempValue = temp.day;
+    } else if (currentHour >= 18 && currentHour < 20) {
+        tempValue = temp.eve;
+    } else if (currentHour >= 20 && currentHour < 6) {
+        tempValue = temp.night;
+    }
+
+    return tempValue;
 
 }
